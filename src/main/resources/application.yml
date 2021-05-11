@@ -2,21 +2,24 @@ server:
   port: 80
 spring:   
   datasource:
-    url: jdbc:mysql://localhost:3306/cs544
-    username: john
-    password: john
-    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://ec2-3-217-219-146.compute-1.amazonaws.com:5432/dcmoqgtmdhc8uj
+    username: ogcylduovysypi
+    password: 09c948909eb8bafccf7ee4d969f05ce112d4b2fc5f0bc530dfd01aa3181cdf91
+    driverClassName: org.postgresql.Driver
+    hikari:
+      maximumPoolSize: 10
   jpa:
     show-sql: true
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+      ddl-auto: create
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
-spring.jpa.hibernate.ddl-auto: create
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
+spring.jpa.hibernate.ddl-auto: create
 #Queue service
 jsa:
   activemq:
@@ -26,9 +29,3 @@ jsa:
 #link: https://www.tutorialspoint.com/spring_boot/spring_boot_sending_email.htm
 emailProducer: user.email.cs544@gmail.com
 passwordEmailProducer: User12345
-
-provider.create.appointment.message: An appointment was create in a session
-provider.update.appointment.message: An appointment was updated
-client.create.appointment.message: Appointment successfully created
-client.update.appointment.message: Appointment successfully updated
-

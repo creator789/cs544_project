@@ -19,17 +19,19 @@ public class EmailServiceProducer implements IEmailService{
     @Value("${jsa.activemq.queue}")
     String queue;
 
+    @Override
     public void sendMessage(Person person, String body) throws MessagingException {
         log.info("Sending an email to "+person.getEmail());
         sendMessage(new Email(person.getEmail(),"css544 to person email",body));
     }
 
+    @Override
     public void sendMessage(String to, String body) throws MessagingException {
         log.info("Sending an email to "+to);
         sendMessage(new Email(to,"default subject",body));
     }
 
-    @Override
+
     public void sendMessage(Email e) throws MessagingException {
         //sending messsage
         jmsTemplate.convertAndSend(queue, e);

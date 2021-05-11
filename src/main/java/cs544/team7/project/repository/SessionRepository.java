@@ -10,5 +10,5 @@ import cs544.team7.project.model.Session;
 @Repository
 @Transactional
 public interface SessionRepository extends JpaRepository<Session, Integer> {
-	
+
 }

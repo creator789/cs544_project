@@ -1,9 +1,13 @@
 package cs544.team7.project.model;
 
-public class Email {
+import javax.validation.constraints.NotNull;
 
+public class Email {
+    @NotNull
     private String to;
+    @NotNull
     private String subject;
+    @NotNull
     private String body;
 
     public Email() {
