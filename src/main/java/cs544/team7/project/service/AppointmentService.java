@@ -210,4 +210,6 @@ public class AppointmentService implements IAppointmentService {
         appointmentRepository.save(a);
         log.info("An appointment has been updated!");
     }
+
+
 }

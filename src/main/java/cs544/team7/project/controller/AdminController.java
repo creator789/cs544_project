@@ -3,6 +3,9 @@ package cs544.team7.project.controller;
 import cs544.team7.project.model.Session;
 import cs544.team7.project.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +24,7 @@ public class AdminController {
 
     @GetMapping("sessions")
     public List<Session> getSessions() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return sessionService.getAllSessions();
     }
 

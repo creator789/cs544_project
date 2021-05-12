@@ -12,5 +12,6 @@ import cs544.team7.project.model.Person;
 @Repository
 @Transactional
 public interface PersonRepository extends JpaRepository<Person, Integer> {
-	public Person getById(Integer id);
+	Person getById(Integer id);
+	Person getByUsername(String username);
 }

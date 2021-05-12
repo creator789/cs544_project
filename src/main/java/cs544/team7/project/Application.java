@@ -18,6 +18,10 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.jms.ConnectionFactory;
 import javax.mail.MessagingException;
@@ -30,6 +34,11 @@ import java.util.List;
 
 @SpringBootApplication
 public class Application {
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 	@Bean
 	public ConnectionFactory connectionFactory() {
@@ -53,17 +62,6 @@ public class Application {
 		factory.setMessageConverter(jacksonJmsMessageConverter());
 		configurer.configure(factory, connectionFactory);
 		return factory;
-	}
-
-	/*
-	 * Used for Sending Messages.
-	 */
-	@Bean
-	public JmsTemplate jmsTemplate(){
-		JmsTemplate template = new JmsTemplate();
-		template.setMessageConverter(jacksonJmsMessageConverter());
-		template.setConnectionFactory(connectionFactory());
-		return template;
 	}
 
 	public static void main(String[] args) throws MessagingException, IllegalAccessException {

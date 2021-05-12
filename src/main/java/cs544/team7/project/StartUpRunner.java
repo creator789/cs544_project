@@ -10,8 +10,11 @@ import cs544.team7.project.service.ISessionService;
 import cs544.team7.project.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -30,6 +33,11 @@ public class StartUpRunner implements CommandLineRunner {
     @Autowired
     private SessionRepository sessionRepository;
 
+    @Autowired
+    private AppointmentService appointmentService;
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     @Transactional
     public void run(String...args) throws Exception {
@@ -37,11 +45,11 @@ public class StartUpRunner implements CommandLineRunner {
         Role clientRole = new Role(RoleType.CLIENT);
         Role adminRole = new Role(RoleType.ADMIN);
         Person client = new Person(
-                "John", "Smith", "jmsvsmorone@gmail.com", "jsmith", "1234",
+                "John", "Smith", "jmsvsmorone@gmail.com", "jsmith", encoder.encode("jsmith"),
                 Arrays.asList(clientRole));
         Person admin = new Person(
-                "Mike", "Doe", "jmsvsmorone@gmail.com", "admin", "1234",
-                Arrays.asList(adminRole, providerRole));
+                "Mike", "Doe", "jmsvsmorone@gmail.com", "admin", encoder.encode("admin"),
+                Arrays.asList(adminRole, providerRole, clientRole));
 
         Session session = new Session(
                 LocalDate.of(2021, Month.MAY, 16),
@@ -55,6 +63,6 @@ public class StartUpRunner implements CommandLineRunner {
         personRepository.save(client);
         personRepository.save(admin);
         sessionRepository.save(session);
-        appointmentRepository.save(appointment);
+        appointmentService.makeReservation(client,session);
     }
 }
