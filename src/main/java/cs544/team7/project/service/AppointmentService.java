@@ -38,24 +38,33 @@ public class AppointmentService implements IAppointmentService {
 
     @Override
     public Appointment makeReservation(Person p, Session s) {
-        if(p == null || s == null) throw new IllegalArgumentException("Argument is null");
+        // null check
+        if(p == null || s == null || s.getProvider() == null) throw new IllegalArgumentException("Argument is null");
+
         boolean sessionApproved =  s.getAppointments().stream().filter(
                 appointment -> appointment.getStatus() == APPROVED
         ).count() >= 1L;
-        boolean isClient =  p.getRoles()
-                             .stream()
-                             .filter(role -> role.getType() == CLIENT)
-                             .count() >= 1L;
+        // already approved
         if(sessionApproved) throw new IllegalStateException("Sesssion has already been assigned!");
+
+        // old session check
         if(LocalDate.now().isAfter(s.getDate()) ||
                 (LocalDate.now().isEqual(s.getDate()) && LocalTime.now().isAfter(s.getStartTime())))
             throw new OldSessionException();
+
+        boolean isClient =  p.getRoles()
+                .stream()
+                .filter(role -> role.getType() == CLIENT)
+                .count() >= 1L;
+        // not client
         if(!isClient) throw new RuntimeException("Person is not client");
+
+        // ok
+        // send to the client and provider message
         emailService.sendMessage(p, "You have successfully created Appointment!");
         emailService.sendMessage(s.getProvider(), "Client has successfully created Appointment!");
-        Appointment appointment = new Appointment(p, s);
-        appointmentRepository.save(appointment);
-        return appointment;
+        // create and save appointment
+        return appointmentRepository.save(new Appointment(p, s));
     }
 
     @Override
@@ -83,7 +92,7 @@ public class AppointmentService implements IAppointmentService {
                 updateAppointment(p, a);
             }
         }
-        if(roles.contains(new Role(RoleType.CLIENT))) {
+        else if(roles.contains(new Role(RoleType.CLIENT))) {
             // RoleType is not ADMIN --> Checking if session start time is after more than 48 hrs
             if(LocalTime.now().plusHours(48).isAfter(a.getSession().getStartTime())){
                 return false;

@@ -66,6 +66,3 @@ Content-Type: application/json
 ### Get all appointments
 GET localhost/client/appointments
 Authorization: Basic client 1234
-
-
-

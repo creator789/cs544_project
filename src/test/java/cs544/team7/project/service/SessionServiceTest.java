@@ -89,6 +89,14 @@ class SessionServiceTest {
     }
 
     @Test
+    void canGetAllSessionsByProviderTest() {
+        // when
+        List<Session> sessions = underTest.getAllSessionsByProvider(sampleSession.getProvider());
+        // then
+        verify(repo).findAll();
+    }
+
+    @Test
     void getAllAvailableSessionsTest() {
         sampleSession.setStartTime(LocalTime.now().plusHours(2));
         Appointment appointment2 = new Appointment(new Person(), sampleSession);
@@ -115,6 +123,14 @@ class SessionServiceTest {
                     appointment -> assertFalse(appointment.getStatus() == APPROVED)
             );
         });
+    }
+
+    @Test
+    void canGetAllAvailableSessionsByProviderTest() {
+        // when
+        List<Session> sessions = underTest.getAllAvailableSessionsByProvider(sampleSession.getProvider());
+        // then
+        verify(repo).findAll();
     }
 
     @Test

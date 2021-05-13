@@ -1,5 +1,6 @@
 package cs544.team7.project.controller;
 
+import cs544.team7.project.exception.SessionNotFoundException;
 import cs544.team7.project.model.Appointment;
 import cs544.team7.project.model.Person;
 import cs544.team7.project.model.Session;

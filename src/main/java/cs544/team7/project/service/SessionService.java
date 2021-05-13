@@ -66,7 +66,9 @@ public class SessionService implements ISessionService {
     }
 
     public Session getSessionById(int id) {
-        return sessionRepository.findById(id).orElseThrow(SessionNotFoundException::new);
+        return sessionRepository
+                .findById(id)
+                .orElseThrow(SessionNotFoundException::new); // 404
     }
 
 
