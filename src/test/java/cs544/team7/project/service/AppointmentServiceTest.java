@@ -53,7 +53,7 @@ class AppointmentServiceTest {
 
         // then
         verify(repo).save(a);
-      //  verify(emailService).sendMessage(any(Person.class), anyString());
+        verify(emailService).sendMessage(any(Person.class), anyString());
         assertThat(a.getClient()).isEqualTo(person);
         assertThat(a.getSession()).isEqualTo(session);
     }
